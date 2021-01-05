@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void doSomething() {
-        System.out.println("shbfkjsdhgfg");
+        System.out.println("asdfgjkasgfjshbfkjsdhgfg");
 
         System.out.println("shbfkjsdhgfg");
 
