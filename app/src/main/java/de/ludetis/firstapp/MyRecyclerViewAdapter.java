@@ -1,10 +1,14 @@
 package de.ludetis.firstapp;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,9 +22,13 @@ import de.ludetis.firstapp.data.NeBankCard;
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.BankCardViewHolder> {
 
     private final IBankCardsManager bankCardList;
+    private final DetailFragmentHelper detailFragmentHelper;
+    private final boolean openInNewActivity;
 
-    public MyRecyclerViewAdapter(IBankCardsManager bankCardList) {
+    public MyRecyclerViewAdapter(IBankCardsManager bankCardList, DetailFragmentHelper detailFragmentHelper, boolean openInNewActivity) {
         this.bankCardList = bankCardList;
+        this.detailFragmentHelper = detailFragmentHelper;
+        this.openInNewActivity = openInNewActivity;
     }
 
     @NonNull
@@ -50,7 +58,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     @Override
     public void onBindViewHolder(@NonNull BankCardViewHolder holder, int position) {
-        holder.bind(bankCardList.get(position));
+        holder.bind(bankCardList.get(position), position);
     }
 
     @Override
@@ -65,6 +73,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         private TextView amount;
         private TextView date;
         private TextView pin;
+        private View itemViewMain;
 
         public BankCardViewHolder(@NonNull View itemView, int viewType) {
             super(itemView);
@@ -74,7 +83,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             } else if (viewType == 1) {
                 itemView.setBackgroundColor(Color.BLUE);
             }
-
+            itemViewMain = itemView;
             ownerName = itemView.findViewById(R.id.bank_card_name_tv);
             num = itemView.findViewById(R.id.bank_card_number_tv);
             amount = itemView.findViewById(R.id.bank_card_sum_tv);
@@ -82,12 +91,29 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             pin = itemView.findViewById(R.id.bank_card_pin_tv);
         }
 
-        public void bind(Card card) {
+        public void bind(Card card, int position) {
             ownerName.setText(card.getOwnerName());
             num.setText(card.getNum());
             amount.setText(String.valueOf(card.getAmount()));
             date.setText(card.getDate());
             pin.setText(String.valueOf(card.getPin()));
+
+            View.OnClickListener o = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Context context = ownerName.getContext();
+
+                    if (openInNewActivity) {
+                        Intent intent = new Intent(context, DetailActivity.class);
+                        intent.putExtra(DetailActivity.KEY_POSITION, position);
+                        context.startActivity(intent);
+                    } else {
+                        detailFragmentHelper.showCard(position);
+                    }
+                }
+            };
+
+            itemViewMain.setOnClickListener(o);
         }
     }
 }
