@@ -17,9 +17,9 @@ import de.ludetis.firstapp.data.NeBankCard;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.BankCardViewHolder> {
 
-    private final List<Card> bankCardList;
+    private final IBankCardsManager bankCardList;
 
-    public MyRecyclerViewAdapter(List<Card> bankCardList) {
+    public MyRecyclerViewAdapter(IBankCardsManager bankCardList) {
         this.bankCardList = bankCardList;
     }
 
