@@ -1,5 +1,6 @@
 package de.ludetis.firstapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,9 +23,7 @@ public class MainActivity extends AppCompatActivity implements DetailFragmentHel
 
         myRecyclerView = findViewById(R.id.myRecyclerVoew);
 
-        boolean openInNewActivity = (findViewById(R.id.detailActivityRoot) == null);
-
-        MyRecyclerViewAdapter myRecyclerViewAdapter = new MyRecyclerViewAdapter(BankCardsManager.getInstance(), this, openInNewActivity);
+        MyRecyclerViewAdapter myRecyclerViewAdapter = new MyRecyclerViewAdapter(BankCardsManager.getInstance(), this);
         myRecyclerView.setAdapter(myRecyclerViewAdapter);
         myRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
 
@@ -40,11 +39,6 @@ public class MainActivity extends AppCompatActivity implements DetailFragmentHel
 
             }
         });
-
-//        String string = getResources().getString(R.string.dialog_alert);
-//
-//        Toast.makeText(this, string.replace("{COUNT}", "10"), Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
@@ -55,14 +49,19 @@ public class MainActivity extends AppCompatActivity implements DetailFragmentHel
 
     @Override
     public void showCard(int position) {
+        if (findViewById(R.id.detailActivityRoot) == null) {
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra(DetailActivity.KEY_POSITION, position);
+            startActivity(intent);
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putInt(DetailActivity.KEY_POSITION, position);
+            DetailFragment detailFragment = new DetailFragment();
+            detailFragment.setArguments(bundle);
 
-        Bundle bundle = new Bundle();
-        bundle.putInt(DetailActivity.KEY_POSITION, position);
-        DetailFragment detailFragment = new DetailFragment();
-        detailFragment.setArguments(bundle);
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.detailActivityRoot, detailFragment).commit();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detailActivityRoot, detailFragment).commit();
+        }
     }
 }
 
