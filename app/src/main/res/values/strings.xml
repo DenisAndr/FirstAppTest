@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">FirstApp</string>
+    <string name="app_name">First App</string>
+    <string name="card_holder_name">Name:</string>
+    <string name="dialog_alert">Warning! After {COUNT} attempts app will be locked.</string>
 </resources>

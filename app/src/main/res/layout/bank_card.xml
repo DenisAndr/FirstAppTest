@@ -15,9 +15,8 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Имя:" />
+                style="@style/BankCardText"
+                android:text="@string/card_holder_name"/>
 
             <TextView
                 android:id="@+id/bank_card_name_tv"
@@ -31,8 +30,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/BankCardText"
                 android:text="Номер карты:  " />
 
             <TextView
@@ -47,8 +45,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/BankCardText"
                 android:text="Сумма:" />
 
             <TextView
@@ -63,8 +60,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/BankCardText"
                 android:text="Дата:" />
 
             <TextView
@@ -79,9 +75,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/bank_card_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/BankCardText"
                 android:text="Пин код:" />
 
             <TextView

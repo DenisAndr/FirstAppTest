@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Перша прога</string>
+    <string name="card_holder_name">Імя:</string>
+    <string name="dialog_alert">Увага! После {COUNT} попыток приложение заблокируется.</string>
+</resources>
