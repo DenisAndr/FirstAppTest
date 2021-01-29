@@ -19,12 +19,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     private final IBankCardsManager bankCardList;
     private final DetailFragmentHelper detailFragmentHelper;
-    private final boolean openInNewActivity;
 
-    public MyRecyclerViewAdapter(IBankCardsManager bankCardList, DetailFragmentHelper detailFragmentHelper, boolean openInNewActivity) {
+    public MyRecyclerViewAdapter(IBankCardsManager bankCardList, DetailFragmentHelper detailFragmentHelper) {
         this.bankCardList = bankCardList;
         this.detailFragmentHelper = detailFragmentHelper;
-        this.openInNewActivity = openInNewActivity;
     }
 
     @NonNull
@@ -97,15 +95,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             View.OnClickListener o = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Context context = ownerName.getContext();
-
-                    if (openInNewActivity) {
-                        Intent intent = new Intent(context, DetailActivity.class);
-                        intent.putExtra(DetailActivity.KEY_POSITION, position);
-                        context.startActivity(intent);
-                    } else {
-                        detailFragmentHelper.showCard(position);
-                    }
+                    detailFragmentHelper.showCard(position);
                 }
             };
 

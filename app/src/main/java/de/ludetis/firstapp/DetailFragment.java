@@ -32,12 +32,23 @@ public class DetailFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.detail_fragment_layout, container, false);
 
+        updateCard(v);
+
+        BankCardsManager.getInstance().addOnCardWasChangedListener(new BankCardsManager.OnCardWasChanged() {
+            @Override
+            public void dataWasChanged() {
+                updateCard(getView());
+            }
+        });
+
+        return v;
+    }
+
+    private void updateCard(View v) {
         ((EditText) v.findViewById(R.id.editTextName)).setText(card.getOwnerName());
         ((EditText) v.findViewById(R.id.editTextNumber)).setText(card.getNum());
         ((EditText) v.findViewById(R.id.editTextSum)).setText("" + card.getAmount());
         ((EditText) v.findViewById(R.id.editTextDate)).setText(card.getDate());
         ((EditText) v.findViewById(R.id.editTextPin)).setText("" + card.getPin());
-
-        return v;
     }
 }

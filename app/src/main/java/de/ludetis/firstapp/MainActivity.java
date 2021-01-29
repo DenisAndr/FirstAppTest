@@ -1,15 +1,20 @@
 package de.ludetis.firstapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 public class MainActivity extends AppCompatActivity implements DetailFragmentHelper {
 
@@ -22,11 +27,16 @@ public class MainActivity extends AppCompatActivity implements DetailFragmentHel
 
         myRecyclerView = findViewById(R.id.myRecyclerVoew);
 
-        boolean openInNewActivity = (findViewById(R.id.detailActivityRoot) == null);
-
-        MyRecyclerViewAdapter myRecyclerViewAdapter = new MyRecyclerViewAdapter(BankCardsManager.getInstance(), this, openInNewActivity);
+        MyRecyclerViewAdapter myRecyclerViewAdapter = new MyRecyclerViewAdapter(BankCardsManager.getInstance(), this);
         myRecyclerView.setAdapter(myRecyclerViewAdapter);
         myRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+
+        BankCardsManager.getInstance().addOnCardWasChangedListener(new BankCardsManager.OnCardWasChanged() {
+            @Override
+            public void dataWasChanged() {
+                myRecyclerViewAdapter.notifyDataSetChanged();
+            }
+        });
 
 
         FloatingActionButton floatingActionButton = findViewById(R.id.floatingActionButton);
@@ -40,11 +50,6 @@ public class MainActivity extends AppCompatActivity implements DetailFragmentHel
 
             }
         });
-
-//        String string = getResources().getString(R.string.dialog_alert);
-//
-//        Toast.makeText(this, string.replace("{COUNT}", "10"), Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
@@ -55,14 +60,30 @@ public class MainActivity extends AppCompatActivity implements DetailFragmentHel
 
     @Override
     public void showCard(int position) {
+        if (findViewById(R.id.detailActivityRoot) == null) {
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra(DetailActivity.KEY_POSITION, position);
+            startActivity(intent);
+        } else {
+            ViewPager2 viewPager = findViewById(R.id.viewPager);
+            viewPager.setAdapter(new ViewPagerFragmentAdapter(this, position));
+            TabLayout tabLayout = findViewById(R.id.tabLayout);
+            TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
+                @Override
+                public void onConfigureTab(@NonNull TabLayout.Tab tab, int tabPosition) {
+                    switch (tabPosition) {
+                        case 0 :
+                            tab.setText("Инфо");
+                            break;
+                        case 1 :
+                            tab.setText("Редактирывание");
+                            break;
 
-        Bundle bundle = new Bundle();
-        bundle.putInt(DetailActivity.KEY_POSITION, position);
-        DetailFragment detailFragment = new DetailFragment();
-        detailFragment.setArguments(bundle);
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.detailActivityRoot, detailFragment).commit();
+                    }
+                }
+            });
+            tabLayoutMediator.attach();
+        }
     }
 }
 

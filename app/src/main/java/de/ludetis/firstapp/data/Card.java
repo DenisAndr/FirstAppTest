@@ -35,4 +35,24 @@ public abstract class Card {
     public int getPin() {
         return pin;
     }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
+    }
+
+    public void setAmount(float amount) {
+        this.amount = amount;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setPin(int pin) {
+        this.pin = pin;
+    }
 }

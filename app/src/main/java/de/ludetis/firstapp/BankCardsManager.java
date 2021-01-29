@@ -38,4 +38,21 @@ public final class BankCardsManager implements IBankCardsManager {
     public void add(Card card) {
         bankCardList.add(card);
     }
+
+    private List<OnCardWasChanged> listeners = new ArrayList<>();
+
+    public void addOnCardWasChangedListener(OnCardWasChanged listener) {
+        listeners.add(listener);
+    }
+
+    public void notifyDataWasChanged() {
+        for (OnCardWasChanged listener : listeners) {
+            listener.dataWasChanged();
+        }
+    }
+
+    interface OnCardWasChanged {
+        void dataWasChanged();
+    }
+
 }
