@@ -10,11 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import de.ludetis.firstapp.data.Card;
+import de.ludetis.firstapp.data.BankCard;
 
 public class DetailFragment extends Fragment {
 
-    private Card card;
+    private int position;
 
     public DetailFragment() {
     }
@@ -22,8 +22,7 @@ public class DetailFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int position = getArguments().getInt(DetailActivity.KEY_POSITION);
-        card = BankCardsManager.getInstance().get(position);
+        position = getArguments().getInt(DetailActivity.KEY_POSITION);
     }
 
     @Nullable
@@ -45,6 +44,12 @@ public class DetailFragment extends Fragment {
     }
 
     private void updateCard(View v) {
+        BankCard card = BankCardsManager.getInstance().get(position);
+
+        if (v == null || card == null) {
+            return;
+        }
+
         ((EditText) v.findViewById(R.id.editTextName)).setText(card.getOwnerName());
         ((EditText) v.findViewById(R.id.editTextNumber)).setText(card.getNum());
         ((EditText) v.findViewById(R.id.editTextSum)).setText("" + card.getAmount());

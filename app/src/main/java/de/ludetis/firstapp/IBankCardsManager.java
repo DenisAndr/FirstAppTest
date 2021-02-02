@@ -1,9 +1,11 @@
 package de.ludetis.firstapp;
 
-import de.ludetis.firstapp.data.Card;
+import de.ludetis.firstapp.data.BankCard;
 
 public interface IBankCardsManager {
-    Card get(int position);
+    BankCard get(int position);
     int size();
-    void add(Card vitalik);
+    void add(BankCard vitalik);
+
+    void update(BankCard card);
 }

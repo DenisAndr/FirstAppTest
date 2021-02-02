@@ -3,40 +3,47 @@ package de.ludetis.firstapp;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ludetis.firstapp.data.Card;
+import de.ludetis.firstapp.data.BankCard;
+import de.ludetis.firstapp.room.CardDao;
 
 public final class BankCardsManager implements IBankCardsManager {
 
     private static BankCardsManager instance;
+    private final CardDao cardDao;
 
-    private List<Card> bankCardList = new ArrayList<>();
+    private BankCardsManager(CardDao cardDao) {
+        this.cardDao = cardDao;
+    }
 
-    private BankCardsManager() {
-
+    public static void init(CardDao cardDao) {
+        if (instance == null) {
+            instance = new BankCardsManager(cardDao);
+        }
     }
 
     public static BankCardsManager getInstance() {
-
-        if (instance == null) {
-            instance = new BankCardsManager();
-        }
-
         return instance;
     }
 
     @Override
-    public Card get(int position) {
-        return bankCardList.get(position);
+    public BankCard get(int position) {
+        return cardDao.loadById(position + 1);
     }
 
     @Override
     public int size() {
-        return bankCardList.size();
+        return cardDao.getAll().size();
     }
 
     @Override
-    public void add(Card card) {
-        bankCardList.add(card);
+    public void add(BankCard card) {
+        cardDao.insertAll(card);
+    }
+
+    @Override
+    public void update(BankCard card) {
+        cardDao.update(card);
+        notifyDataWasChanged();
     }
 
     private List<OnCardWasChanged> listeners = new ArrayList<>();
@@ -45,7 +52,7 @@ public final class BankCardsManager implements IBankCardsManager {
         listeners.add(listener);
     }
 
-    public void notifyDataWasChanged() {
+    private void notifyDataWasChanged() {
         for (OnCardWasChanged listener : listeners) {
             listener.dataWasChanged();
         }

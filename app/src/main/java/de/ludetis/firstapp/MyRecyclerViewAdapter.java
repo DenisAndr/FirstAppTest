@@ -1,7 +1,5 @@
 package de.ludetis.firstapp;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import de.ludetis.firstapp.data.BankCard;
-import de.ludetis.firstapp.data.Card;
-import de.ludetis.firstapp.data.NeBankCard;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.BankCardViewHolder> {
 
@@ -32,22 +28,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         View card = LayoutInflater.from(parent.getContext()).inflate(R.layout.bank_card, parent, false);
         BankCardViewHolder bankCardViewHolder = new BankCardViewHolder(card, viewType);
         return bankCardViewHolder;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-
-        Card card = bankCardList.get(position);
-
-        if (card instanceof BankCard) {
-            return 0;
-        }
-
-        if (card instanceof NeBankCard) {
-            return 1;
-        }
-
-        return  -1;
     }
 
     @Override
@@ -85,7 +65,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             pin = itemView.findViewById(R.id.bank_card_pin_tv);
         }
 
-        public void bind(Card card, int position) {
+        public void bind(BankCard card, int position) {
             ownerName.setText(card.getOwnerName());
             num.setText(card.getNum());
             amount.setText(String.valueOf(card.getAmount()));
