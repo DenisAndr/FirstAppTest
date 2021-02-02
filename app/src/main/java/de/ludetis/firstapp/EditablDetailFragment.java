@@ -15,14 +15,13 @@ import de.ludetis.firstapp.data.Card;
 
 public class EditablDetailFragment extends Fragment {
 
-    private Card card;
-
     EditText editTextName;
     EditText editTextNumber;
     EditText editTextSum;
     EditText editTextDate;
     EditText editTextPin;
     Button saveButton;
+    int position;
 
     public EditablDetailFragment() {
     }
@@ -30,8 +29,7 @@ public class EditablDetailFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int position = getArguments().getInt(DetailActivity.KEY_POSITION);
-        card = BankCardsManager.getInstance().get(position);
+        position = getArguments().getInt(DetailActivity.KEY_POSITION);
     }
 
     @Nullable
@@ -48,16 +46,17 @@ public class EditablDetailFragment extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Card card = BankCardsManager.getInstance().get(position);
                 card.setOwnerName(editTextName.getText().toString());
                 card.setNum(editTextNumber.getText().toString());
                 card.setAmount(Float.parseFloat(editTextSum.getText().toString()));
                 card.setDate(editTextDate.getText().toString());
                 card.setPin(Integer.parseInt(editTextPin.getText().toString()));
-
-                BankCardsManager.getInstance().notifyDataWasChanged();
+                BankCardsManager.getInstance().update(card);
             }
         });
 
+        Card card = BankCardsManager.getInstance().get(position);
         editTextName.setText(card.getOwnerName());
         editTextNumber.setText(card.getNum());
         editTextSum.setText("" + card.getAmount());

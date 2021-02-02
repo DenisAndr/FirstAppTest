@@ -6,4 +6,7 @@ public class BankCard extends Card {
         super(ownerName, num, amount, date, pin);
     }
 
+    public BankCard() {
+        super();
+    }
 }

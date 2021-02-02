@@ -7,6 +7,7 @@ public abstract class Card {
     private float amount;
     private String date;
     private int pin;
+    private int id;
 
     public Card(String ownerName, String num, float amount, String date, int pin) {
         this.ownerName = ownerName;
@@ -14,6 +15,14 @@ public abstract class Card {
         this.amount = amount;
         this.date = date;
         this.pin = pin;
+    }
+
+    public Card() {
+
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getOwnerName() {
@@ -55,4 +64,9 @@ public abstract class Card {
     public void setPin(int pin) {
         this.pin = pin;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
 }
