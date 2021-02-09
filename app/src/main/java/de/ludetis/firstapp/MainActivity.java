@@ -2,12 +2,14 @@ package de.ludetis.firstapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -15,6 +17,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+
+import de.ludetis.firstapp.broadcasts.MyBroadcastReceiver;
 
 public class MainActivity extends AppCompatActivity implements DetailFragmentHelper {
 
@@ -45,11 +49,27 @@ public class MainActivity extends AppCompatActivity implements DetailFragmentHel
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(MainActivity.this, AddCardActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(MainActivity.this, AddCardActivity.class);
+//                startActivity(intent);
+
+                Intent intent = new Intent();
+                intent.setAction("MyBroadcastReceiverAction");
+                intent.putExtra("data", "Nothing to see here, move along.");
+
+                LocalBroadcastManager.getInstance(MainActivity.this).sendBroadcast(intent);
 
             }
         });
+
+        registerReceiver(new MyBroadcastReceiver(), new IntentFilter("MyBroadcastReceiverAction"));
+
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
