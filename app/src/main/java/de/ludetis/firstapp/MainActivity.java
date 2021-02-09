@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -88,9 +89,13 @@ public class MainActivity extends AppCompatActivity implements DetailFragmentHel
 
         Intent serviceStartIntent = new Intent(this, MyServece.class);
 
-        bindService(serviceStartIntent, myServiceConnection, Service.BIND_AUTO_CREATE);
+//        bindService(serviceStartIntent, myServiceConnection, Service.BIND_AUTO_CREATE);
 
-//        startService(serviceStartIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceStartIntent);
+        } else {
+            startService(serviceStartIntent);
+        }
 //
 //        stopService(serviceStartIntent);
 
