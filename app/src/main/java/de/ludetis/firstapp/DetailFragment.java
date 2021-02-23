@@ -10,13 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import javax.inject.Inject;
+
 import de.ludetis.firstapp.data.BankCard;
 
 public class DetailFragment extends Fragment {
 
+    @Inject
+    BankCardsManager bankCardsManager;
     private int position;
 
     public DetailFragment() {
+        MyApp.getBankCardManagerComponent().inject(this);
     }
 
     @Override
@@ -33,7 +38,7 @@ public class DetailFragment extends Fragment {
 
         updateCard(v);
 
-        BankCardsManager.getInstance().addOnCardWasChangedListener(new BankCardsManager.OnCardWasChanged() {
+        bankCardsManager.addOnCardWasChangedListener(new BankCardsManager.OnCardWasChanged() {
             @Override
             public void dataWasChanged() {
                 updateCard(getView());
@@ -44,16 +49,19 @@ public class DetailFragment extends Fragment {
     }
 
     private void updateCard(View v) {
-        BankCard card = BankCardsManager.getInstance().get(position);
 
-        if (v == null || card == null) {
+        if (v == null) {
             return;
         }
 
-        ((EditText) v.findViewById(R.id.editTextName)).setText(card.getOwnerName());
-        ((EditText) v.findViewById(R.id.editTextNumber)).setText(card.getNum());
-        ((EditText) v.findViewById(R.id.editTextSum)).setText("" + card.getAmount());
-        ((EditText) v.findViewById(R.id.editTextDate)).setText(card.getDate());
-        ((EditText) v.findViewById(R.id.editTextPin)).setText("" + card.getPin());
+        bankCardsManager.get(position, card -> {
+            if (card != null) {
+                ((EditText) v.findViewById(R.id.editTextName)).setText(card.getOwnerName());
+                ((EditText) v.findViewById(R.id.editTextNumber)).setText(card.getNum());
+                ((EditText) v.findViewById(R.id.editTextSum)).setText("" + card.getAmount());
+                ((EditText) v.findViewById(R.id.editTextDate)).setText(card.getDate());
+                ((EditText) v.findViewById(R.id.editTextPin)).setText("" + card.getPin());
+            }
+        });
     }
 }

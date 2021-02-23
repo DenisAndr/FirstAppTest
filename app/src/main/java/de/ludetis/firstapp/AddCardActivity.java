@@ -8,14 +8,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import javax.inject.Inject;
+
 import de.ludetis.firstapp.data.BankCard;
 
 public class AddCardActivity extends AppCompatActivity {
+
+    @Inject
+    BankCardsManager bankCardsManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_card);
+
+        MyApp.getBankCardManagerComponent().inject(this);
 
         Button createCard = findViewById(R.id.buttonAddCard);
         createCard.setOnClickListener(new View.OnClickListener() {
@@ -34,7 +41,7 @@ public class AddCardActivity extends AppCompatActivity {
                 }
 
                 try {
-                    BankCardsManager.getInstance().add(new BankCard(name, num, Float.parseFloat(sum), date, Integer.parseInt(pin)));
+                    bankCardsManager.add(new BankCard(name, num, Float.parseFloat(sum), date, Integer.parseInt(pin)));
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                     Toast.makeText(AddCardActivity.this, "Неправильно заполнены поля", Toast.LENGTH_SHORT).show();

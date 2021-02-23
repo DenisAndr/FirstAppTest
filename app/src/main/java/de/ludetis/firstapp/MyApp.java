@@ -2,23 +2,24 @@ package de.ludetis.firstapp;
 
 import android.app.Application;
 
-import androidx.room.Room;
-
-import de.ludetis.firstapp.room.AppDatabase;
-import de.ludetis.firstapp.room.CardDao;
+import de.ludetis.firstapp.di.components.BankCardManagerComponent;
+import de.ludetis.firstapp.di.components.DaggerBankCardManagerComponent;
+import de.ludetis.firstapp.di.modules.BankCardManagerModule;
 
 public class MyApp extends Application {
+
+    private static BankCardManagerComponent bankCardManagerComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "database-cards").allowMainThreadQueries().build();
+        bankCardManagerComponent = DaggerBankCardManagerComponent.builder()
+                .bankCardManagerModule(new BankCardManagerModule(this)).build();
 
-        CardDao cardDao = db.cardDao();
+    }
 
-        BankCardsManager.init(cardDao);
-
+    public static BankCardManagerComponent getBankCardManagerComponent() {
+        return bankCardManagerComponent;
     }
 }

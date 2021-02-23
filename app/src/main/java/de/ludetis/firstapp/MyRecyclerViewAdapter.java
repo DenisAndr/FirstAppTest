@@ -9,16 +9,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.ludetis.firstapp.data.BankCard;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.BankCardViewHolder> {
 
     private final IBankCardsManager bankCardList;
+    private List<BankCard> bankCards = new ArrayList<>();
     private final DetailFragmentHelper detailFragmentHelper;
 
     public MyRecyclerViewAdapter(IBankCardsManager bankCardList, DetailFragmentHelper detailFragmentHelper) {
         this.bankCardList = bankCardList;
         this.detailFragmentHelper = detailFragmentHelper;
+
+        bankCardList.getAll(cards -> {
+            bankCards.addAll(cards);
+        });
     }
 
     @NonNull
@@ -32,12 +40,12 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     @Override
     public void onBindViewHolder(@NonNull BankCardViewHolder holder, int position) {
-        holder.bind(bankCardList.get(position), position);
+        holder.bind(bankCards.get(position), position);
     }
 
     @Override
     public int getItemCount() {
-        return bankCardList.size();
+        return bankCards.size();
     }
 
     public class BankCardViewHolder extends RecyclerView.ViewHolder {

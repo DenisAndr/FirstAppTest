@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import javax.inject.Inject;
+
 import de.ludetis.firstapp.data.BankCard;
 
 public class EditablDetailFragment extends Fragment {
@@ -22,8 +24,11 @@ public class EditablDetailFragment extends Fragment {
     EditText editTextPin;
     Button saveButton;
     int position;
+    @Inject
+    BankCardsManager bankCardsManager;
 
     public EditablDetailFragment() {
+        MyApp.getBankCardManagerComponent().inject(this);
     }
 
     @Override
@@ -43,26 +48,24 @@ public class EditablDetailFragment extends Fragment {
         editTextPin = v.findViewById(R.id.editTextPin);
         saveButton = v.findViewById(R.id.buttonSave);
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BankCard card = BankCardsManager.getInstance().get(position);
+        saveButton.setOnClickListener(v1 -> {
+            bankCardsManager.get(position, card -> {
                 card.setOwnerName(editTextName.getText().toString());
                 card.setNum(editTextNumber.getText().toString());
                 card.setAmount(Float.parseFloat(editTextSum.getText().toString()));
                 card.setDate(editTextDate.getText().toString());
                 card.setPin(Integer.parseInt(editTextPin.getText().toString()));
-                BankCardsManager.getInstance().update(card);
-            }
+                bankCardsManager.update(card);
+            });
         });
 
-        BankCard card = BankCardsManager.getInstance().get(position);
-        editTextName.setText(card.getOwnerName());
-        editTextNumber.setText(card.getNum());
-        editTextSum.setText("" + card.getAmount());
-        editTextDate.setText(card.getDate());
-        editTextPin.setText("" + card.getPin());
-
+        bankCardsManager.get(position, card -> {
+            editTextName.setText(card.getOwnerName());
+            editTextNumber.setText(card.getNum());
+            editTextSum.setText("" + card.getAmount());
+            editTextDate.setText(card.getDate());
+            editTextPin.setText("" + card.getPin());
+        });
         return v;
     }
 }

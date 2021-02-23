@@ -16,22 +16,27 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import javax.inject.Inject;
+
 public class MainActivity extends AppCompatActivity implements DetailFragmentHelper {
 
     private RecyclerView myRecyclerView;
+    @Inject
+    BankCardsManager bankCardsManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_1);
+        MyApp.getBankCardManagerComponent().inject(this);
 
         myRecyclerView = findViewById(R.id.myRecyclerVoew);
 
-        MyRecyclerViewAdapter myRecyclerViewAdapter = new MyRecyclerViewAdapter(BankCardsManager.getInstance(), this);
+        MyRecyclerViewAdapter myRecyclerViewAdapter = new MyRecyclerViewAdapter(bankCardsManager, this);
         myRecyclerView.setAdapter(myRecyclerViewAdapter);
         myRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
 
-        BankCardsManager.getInstance().addOnCardWasChangedListener(new BankCardsManager.OnCardWasChanged() {
+        bankCardsManager.addOnCardWasChangedListener(new BankCardsManager.OnCardWasChanged() {
             @Override
             public void dataWasChanged() {
                 myRecyclerViewAdapter.notifyDataSetChanged();
